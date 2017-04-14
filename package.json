@@ -1,0 +1,28 @@
+{
+  "name": "fs-simple-cache",
+  "version": "1.0.0",
+  "description": "Simple filesystem cache for node.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Laza Bogdan <laza.bogdan@macro-net.ro>",
+  "license": "ISC",
+  "dependencies": {
+    "lodash.merge": "^4.6.0",
+    "mkdirp": "^0.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrontendMatter/fs-simple-cache.git"
+  },
+  "keywords": [
+    "node",
+    "filesystem",
+    "cache"
+  ],
+  "bugs": {
+    "url": "https://github.com/FrontendMatter/fs-simple-cache/issues"
+  },
+  "homepage": "https://github.com/FrontendMatter/fs-simple-cache#readme"
+}
