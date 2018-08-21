@@ -5,6 +5,7 @@ const zlib = require('zlib')
 const crypto = require('crypto')
 const mkdirp = require('mkdirp')
 const merge  = require('lodash.merge')
+const del = require('del')
 
 class Cache {
   constructor (options = {}) {
@@ -17,38 +18,48 @@ class Cache {
     }
   }
 
-  get (source) {
-    return this.readFile(this.getPath(source))
+  get (source, gzip = true) {
+    return this.readFile(this.getPath(source, gzip), gzip)
   }
 
-  put (source, content) {
-    this.saveFile(this.getPath(source), content)
+  put (source, content, gzip = true) {
+    this.saveFile(this.getPath(source, gzip), content, gzip)
   }
 
-  getPath (source) {
-    return path.join(this.options.cacheDirectory, this.getFile(source))
+  delete (source = null, gzip = true) {
+    if (source) {
+      return del.sync(this.getPath(source, gzip))
+    }
+    del.sync(this.cacheDirectory)
   }
 
-  getFile (source) {
+  getPath (source, gzip = true) {
+    return path.join(this.options.cacheDirectory, this.getFile(source, gzip))
+  }
+
+  getFile (source, gzip = true) {
     const hash = crypto.createHash('SHA1')
     hash.update(source)
-    return hash.digest('hex')+'.gzip'
+    return hash.digest('hex') + (gzip ? '.gzip' : '')
   }
 
-  readFile (filename) {
-    let result = {}, content, data
+  readFile (filename, gzip = true) {
+    let result = {}
+    let content = ''
     if (fs.existsSync(filename)) {
-      content = fs.readFileSync(filename) || ''
-      if (content) {
-        data = zlib.gunzipSync(content)
-        result = JSON.parse(data)
+      content = fs.readFileSync(filename)
+      if (content && gzip) {
+        result = JSON.parse(zlib.gunzipSync(content))
       }
     }
-    return result
+    return gzip ? result : (content || '')
   }
 
-  saveFile (filename, content) {
-    const data = zlib.gzipSync(JSON.stringify(content))
+  saveFile (filename, content, gzip = true) {
+    let data = content
+    if (gzip) {
+      data = zlib.gzipSync(JSON.stringify(content))
+    }
     fs.writeFile(filename, data)
   }
 }
