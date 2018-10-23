@@ -60,7 +60,7 @@ class Cache {
     if (gzip) {
       data = zlib.gzipSync(JSON.stringify(content))
     }
-    fs.writeFile(filename, data)
+    fs.writeFileSync(filename, data)
   }
 }
 

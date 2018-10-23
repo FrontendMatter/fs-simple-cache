@@ -1,6 +1,6 @@
 {
   "name": "fs-simple-cache",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Simple filesystem cache for node.",
   "main": "index.js",
   "scripts": {
